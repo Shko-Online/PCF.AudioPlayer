@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-typescript": "^7.22.5",
     "@microsoft/eslint-plugin-power-apps": "^0.2.6",
+    "@shko.online/componentframework-mock": "^0.1.23",
     "@storybook/addon-essentials": "^7.3.2",
     "@storybook/addon-interactions": "^7.3.2",
     "@storybook/addon-links": "^7.3.2",
