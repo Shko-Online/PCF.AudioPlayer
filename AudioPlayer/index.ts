@@ -29,6 +29,7 @@ export class AudioPlayer
   private audio: HTMLAudioElement;
   private audioSource: HTMLSourceElement;
   private duration: HTMLDivElement;
+  private playerContainer: HTMLDivElement;
   private progressBar: HTMLDivElement;
   private timer: HTMLDivElement;
   private togglePlayButton: HTMLDivElement;
@@ -49,8 +50,8 @@ export class AudioPlayer
     container: HTMLDivElement
   ): void {
     // Add control initialization code
-    const playerContainer = document.createElement("div");
-    playerContainer.className = "ShkoOnline.Player";
+    this.playerContainer = document.createElement("div");
+    this.playerContainer.className = context.mode.isVisible ? "ShkoOnline.Player" : "ShkoOnline.Player ShkoOnline.Hidden";
 
     this.audio = document.createElement("audio");
     this.audioSource = document.createElement("source");
@@ -61,7 +62,7 @@ export class AudioPlayer
     this.audio.onloadedmetadata = this.metadataLoaded.bind(this);
     this.audio.ontimeupdate = this.onTimeUpdate.bind(this);
 
-    playerContainer.appendChild(this.audio);
+    this.playerContainer.appendChild(this.audio);
 
     const infos = document.createElement("div");
     infos.className = "ShkoOnline.Infos";
@@ -84,7 +85,7 @@ export class AudioPlayer
 
     infos.appendChild(this.duration);
 
-    playerContainer.appendChild(infos);
+    this.playerContainer.appendChild(infos);
 
     const progress = document.createElement("div");
     progress.className = "ShkoOnline.Progress";
@@ -95,7 +96,7 @@ export class AudioPlayer
 
     progress.appendChild(this.progressBar);
 
-    playerContainer.appendChild(progress);
+    this.playerContainer.appendChild(progress);
 
     const buttons = document.createElement("div");
     buttons.className = "ShkoOnline.Buttons";
@@ -120,9 +121,9 @@ export class AudioPlayer
     this.toggleMuteButton.onclick = this.toggleMute.bind(this);
     buttons.appendChild(this.toggleMuteButton);
 
-    playerContainer.appendChild(buttons);
+    this.playerContainer.appendChild(buttons);
 
-    container.appendChild(playerContainer);
+    container.appendChild(this.playerContainer);
 
     if (this.audioSource.getAttribute("src") !== "") {
       this.audio.load();
@@ -134,7 +135,7 @@ export class AudioPlayer
    * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
    */
   public updateView(context: ComponentFramework.Context<IInputs>): void {
-    // Add code to update control view
+    this.playerContainer.className = context.mode.isVisible ? "ShkoOnline.Player" : "ShkoOnline.Player ShkoOnline.Hidden";
 
     if (this.audioSource.getAttribute("src") !== context.parameters.src.raw) {
       this.audioSource.setAttribute("src", context.parameters.src.raw || "");
