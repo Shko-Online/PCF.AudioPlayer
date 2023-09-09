@@ -16,7 +16,27 @@
 
 import type { IInputs, IOutputs } from "./generated/ManifestTypes";
 
-import './banner';
+import "./banner";
+
+const BUTTONS_CLASS = "ShkoOnline.Buttons";
+const DOWNLOAD_CLASS = "ShkoOnline.Download";
+const DURATION_CLASS = "ShkoOnline.Duration";
+const FORWARD_CLASS = "ShkoOnline.Forward";
+const HIDDEN_CLASS = "ShkoOnline.Hidden";
+const INFOS_CLASS = "ShkoOnline.Infos";
+const LOAD_CLASS = "ShkoOnline.Load";
+const LOADED_CLASS =  "ShkoOnline.Loaded";
+const NO_SOUND_CLASS =  "ShkoOnline.NoSound";
+const PAUSE_CLASS =  "ShkoOnline.Pause";
+const PLAY_CLASS = "ShkoOnline.Play";
+const PLAYER_CLASS = "ShkoOnline.Player"; 
+const PROGRESS_CLASS = "ShkoOnline.Progress";
+const PROGRESS_BAR_CLASS = "ShkoOnline.ProgressBar";
+const REWIND_CLASS = "ShkoOnline.Rewind";
+const SOUND_CLASS = "ShkoOnline.Sound";
+const TIMER_CLASS = "ShkoOnline.Timer";
+const TITLE_CLASS = "ShkoOnline.Title";
+const UNLOADED_CLASS = "ShkoOnline.Unloaded";
 
 export class AudioPlayer
   implements ComponentFramework.StandardControl<IInputs, IOutputs>
@@ -35,6 +55,7 @@ export class AudioPlayer
   private togglePlayButton: HTMLDivElement;
   private toggleMuteButton: HTMLDivElement;
 
+  
   /**
    * Used to initialize the control instance. Controls can kick off remote server calls and other initialization actions here.
    * Data-set values are not initialized here, use updateView.
@@ -51,10 +72,14 @@ export class AudioPlayer
   ): void {
     // Add control initialization code
     this.playerContainer = document.createElement("div");
-    this.playerContainer.className = context.mode.isVisible ? "ShkoOnline.Player" : "ShkoOnline.Player ShkoOnline.Hidden";
-
+    this.playerContainer.className = PLAYER_CLASS;
+    if(! context.mode.isVisible){
+      this.playerContainer.classList.add(HIDDEN_CLASS);
+    }
+    
     this.audio = document.createElement("audio");
     this.audioSource = document.createElement("source");
+    this.audio.preload = "none";
     this.audioSource.setAttribute("type", "audio/mpeg");
     this.audioSource.setAttribute("src", context.parameters.src.raw || "");
     this.audio.appendChild(this.audioSource);
@@ -65,22 +90,22 @@ export class AudioPlayer
     this.playerContainer.appendChild(this.audio);
 
     const infos = document.createElement("div");
-    infos.className = "ShkoOnline.Infos";
+    infos.className = INFOS_CLASS;
 
     this.timer = document.createElement("div");
-    this.timer.className = "ShkoOnline.Timer";
+    this.timer.className = TIMER_CLASS;
     this.timer.innerHTML = "00:00";
 
     infos.appendChild(this.timer);
 
     const title = document.createElement("div");
-    title.className = "ShkoOnline.Title";
+    title.className = TITLE_CLASS;
     title.innerText = "Audio Recording";
 
     infos.appendChild(title);
 
     this.duration = document.createElement("div");
-    this.duration.className = "ShkoOnline.Duration";
+    this.duration.className = DURATION_CLASS;
     this.duration.innerText = "00:00";
 
     infos.appendChild(this.duration);
@@ -88,36 +113,46 @@ export class AudioPlayer
     this.playerContainer.appendChild(infos);
 
     const progress = document.createElement("div");
-    progress.className = "ShkoOnline.Progress";
+    progress.className = PROGRESS_CLASS;
     progress.onclick = this.seek.bind(this);
 
     this.progressBar = document.createElement("div");
-    this.progressBar.className = "ShkoOnline.ProgressBar";
+    this.progressBar.className = PROGRESS_BAR_CLASS;
 
     progress.appendChild(this.progressBar);
 
     this.playerContainer.appendChild(progress);
 
+    const load = document.createElement("div");
+    load.className = LOAD_CLASS;
+
+    const loadButton = document.createElement("div");
+    loadButton.className = DOWNLOAD_CLASS;
+    loadButton.onclick = this.download.bind(this);
+    load.appendChild(loadButton);
+
+    this.playerContainer.appendChild(load);
+
     const buttons = document.createElement("div");
-    buttons.className = "ShkoOnline.Buttons";
+    buttons.className = BUTTONS_CLASS;
 
     const rewindButton = document.createElement("div");
-    rewindButton.className = "ShkoOnline.Rewind";
+    rewindButton.className = REWIND_CLASS;
     rewindButton.onclick = this.rewind.bind(this);
     buttons.appendChild(rewindButton);
 
     this.togglePlayButton = document.createElement("div");
-    this.togglePlayButton.className = "ShkoOnline.Play";
+    this.togglePlayButton.className = PLAY_CLASS;
     this.togglePlayButton.onclick = this.togglePlay.bind(this);
     buttons.appendChild(this.togglePlayButton);
 
     const forwardButton = document.createElement("div");
-    forwardButton.className = "ShkoOnline.Forward";
+    forwardButton.className = FORWARD_CLASS;
     forwardButton.onclick = this.forward.bind(this);
     buttons.appendChild(forwardButton);
 
     this.toggleMuteButton = document.createElement("div");
-    this.toggleMuteButton.className = "ShkoOnline.Sound";
+    this.toggleMuteButton.className = SOUND_CLASS;
     this.toggleMuteButton.onclick = this.toggleMute.bind(this);
     buttons.appendChild(this.toggleMuteButton);
 
@@ -126,7 +161,7 @@ export class AudioPlayer
     container.appendChild(this.playerContainer);
 
     if (this.audioSource.getAttribute("src") !== "") {
-      this.audio.load();
+      this.playerContainer.classList.add(UNLOADED_CLASS);
     }
   }
 
@@ -135,11 +170,27 @@ export class AudioPlayer
    * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
    */
   public updateView(context: ComponentFramework.Context<IInputs>): void {
-    this.playerContainer.className = context.mode.isVisible ? "ShkoOnline.Player" : "ShkoOnline.Player ShkoOnline.Hidden";
+    if (
+      context.mode.isVisible &&
+      this.playerContainer.classList.contains(HIDDEN_CLASS)
+    ) {
+      this.playerContainer.classList.remove(HIDDEN_CLASS);
+    } else if (
+      !context.mode.isVisible &&
+      !this.playerContainer.classList.contains(HIDDEN_CLASS)
+    ) {
+      this.playerContainer.classList.add(HIDDEN_CLASS);
+    }
 
     if (this.audioSource.getAttribute("src") !== context.parameters.src.raw) {
+      if ((context.parameters.src.raw || "") !== "") {
+        if (!this.playerContainer.classList.contains(UNLOADED_CLASS))
+          this.playerContainer.classList.add(UNLOADED_CLASS);
+        if (this.playerContainer.classList.contains(LOADED_CLASS))
+          this.playerContainer.classList.remove(LOADED_CLASS);
+      }
+
       this.audioSource.setAttribute("src", context.parameters.src.raw || "");
-      this.audio.load();
     }
   }
 
@@ -153,6 +204,13 @@ export class AudioPlayer
 
   private metadataLoaded() {
     this.duration.innerHTML = AudioPlayer.getMinutes(this.audio.duration);
+  }
+
+  private download() {
+
+    this.playerContainer.classList.remove(UNLOADED_CLASS);
+    this.playerContainer.classList.add(LOADED_CLASS);
+    this.audio.load();
   }
 
   private forward() {
@@ -172,17 +230,17 @@ export class AudioPlayer
     this.timer.innerHTML = AudioPlayer.getMinutes(t);
     this.setBarProgress();
     if (this.audio.ended) {
-      this.togglePlayButton.className = "ShkoOnline.Play";
+      this.togglePlayButton.className = PLAY_CLASS;
     }
   }
 
   private togglePlay() {
     if (this.audio.error) return;
     if (this.audio.paused) {
-      this.togglePlayButton.className = "ShkoOnline.Pause";
+      this.togglePlayButton.className = PAUSE_CLASS;
       this.audio.play();
     } else {
-      this.togglePlayButton.className = "ShkoOnline.Play";
+      this.togglePlayButton.className = PLAY_CLASS;
       this.audio.pause();
     }
   }
@@ -190,10 +248,10 @@ export class AudioPlayer
     if (this.audio.error) return;
     if (this.audio.muted == false) {
       this.audio.muted = true;
-      this.toggleMuteButton.className = "ShkoOnline.NoSound";
+      this.toggleMuteButton.className = NO_SOUND_CLASS;
     } else {
       this.audio.muted = false;
-      this.toggleMuteButton.className = "ShkoOnline.Sound";
+      this.toggleMuteButton.className = SOUND_CLASS;
     }
   }
 
