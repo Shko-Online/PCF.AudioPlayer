@@ -20,16 +20,19 @@ import "./banner";
 
 const BUTTONS_CLASS = "ShkoOnline.Buttons";
 const DOWNLOAD_CLASS = "ShkoOnline.Download";
+const NO_RECORD_CLASS = "ShkoOnline.NoRecord";
+const NO_RECORD_ICON_CLASS = "ShkoOnline.NoRecordIcon";
 const DURATION_CLASS = "ShkoOnline.Duration";
 const FORWARD_CLASS = "ShkoOnline.Forward";
 const HIDDEN_CLASS = "ShkoOnline.Hidden";
 const INFOS_CLASS = "ShkoOnline.Infos";
 const LOAD_CLASS = "ShkoOnline.Load";
-const LOADED_CLASS =  "ShkoOnline.Loaded";
-const NO_SOUND_CLASS =  "ShkoOnline.NoSound";
-const PAUSE_CLASS =  "ShkoOnline.Pause";
+const LOADED_CLASS = "ShkoOnline.Loaded";
+const NO_SOUND_CLASS = "ShkoOnline.NoSound";
+const NO_RECORDING_CLASS = "ShkoOnline.NoRecording";
+const PAUSE_CLASS = "ShkoOnline.Pause";
 const PLAY_CLASS = "ShkoOnline.Play";
-const PLAYER_CLASS = "ShkoOnline.Player"; 
+const PLAYER_CLASS = "ShkoOnline.Player";
 const PROGRESS_CLASS = "ShkoOnline.Progress";
 const PROGRESS_BAR_CLASS = "ShkoOnline.ProgressBar";
 const REWIND_CLASS = "ShkoOnline.Rewind";
@@ -44,7 +47,7 @@ export class AudioPlayer
   /**
    * Empty constructor.
    */
-  constructor() {}
+  constructor() { }
 
   private audio: HTMLAudioElement;
   private audioSource: HTMLSourceElement;
@@ -55,7 +58,7 @@ export class AudioPlayer
   private togglePlayButton: HTMLDivElement;
   private toggleMuteButton: HTMLDivElement;
 
-  
+
   /**
    * Used to initialize the control instance. Controls can kick off remote server calls and other initialization actions here.
    * Data-set values are not initialized here, use updateView.
@@ -73,15 +76,15 @@ export class AudioPlayer
     // Add control initialization code
     this.playerContainer = document.createElement("div");
     this.playerContainer.className = PLAYER_CLASS;
-    if(! context.mode.isVisible){
+    if (!context.mode.isVisible) {
       this.playerContainer.classList.add(HIDDEN_CLASS);
     }
-    
+
     this.audio = document.createElement("audio");
     this.audioSource = document.createElement("source");
     this.audio.preload = "none";
     this.audioSource.setAttribute("type", "audio/mpeg");
-    this.audioSource.setAttribute("src", context.parameters.src.raw || "");
+    this.audioSource.setAttribute("src", context.parameters.src.raw?.trim() || "");
     this.audio.appendChild(this.audioSource);
     this.audio.append("Your browser does not support the audio element!");
     this.audio.onloadedmetadata = this.metadataLoaded.bind(this);
@@ -100,7 +103,7 @@ export class AudioPlayer
 
     const title = document.createElement("div");
     title.className = TITLE_CLASS;
-    title.innerText = "Audio Recording";
+    title.innerText = "Audio Player";
 
     infos.appendChild(title);
 
@@ -133,6 +136,16 @@ export class AudioPlayer
 
     this.playerContainer.appendChild(load);
 
+    const noRecord = document.createElement("div");
+    noRecord.className = NO_RECORD_CLASS;
+
+    const noRecord_button = document.createElement("div");
+    noRecord_button.className = NO_RECORD_CLASS;
+
+    noRecord.appendChild(noRecord_button);
+
+    this.playerContainer.appendChild(noRecord);
+
     const buttons = document.createElement("div");
     buttons.className = BUTTONS_CLASS;
 
@@ -160,9 +173,13 @@ export class AudioPlayer
 
     container.appendChild(this.playerContainer);
 
-    if (this.audioSource.getAttribute("src") !== "") {
+    if (this.audioSource.getAttribute("src") != null && this.audioSource.getAttribute("src") != "") {
+      console.log(this.audioSource.getAttribute("src") );
       this.playerContainer.classList.add(UNLOADED_CLASS);
+    } else {
+      this.playerContainer.classList.add(NO_RECORDING_CLASS);
     }
+
   }
 
   /**
@@ -182,15 +199,22 @@ export class AudioPlayer
       this.playerContainer.classList.add(HIDDEN_CLASS);
     }
 
-    if (this.audioSource.getAttribute("src") !== context.parameters.src.raw) {
-      if ((context.parameters.src.raw || "") !== "") {
+    if (this.audioSource.getAttribute("src") !== context.parameters.src.raw?.trim()) {
+      if ((context.parameters.src.raw?.trim() || "") !== "") {
         if (!this.playerContainer.classList.contains(UNLOADED_CLASS))
           this.playerContainer.classList.add(UNLOADED_CLASS);
         if (this.playerContainer.classList.contains(LOADED_CLASS))
           this.playerContainer.classList.remove(LOADED_CLASS);
+        if (this.playerContainer.classList.contains(NO_RECORDING_CLASS))
+          this.playerContainer.classList.remove(NO_RECORDING_CLASS);
+
+      } else {
+        this.playerContainer.classList.remove(UNLOADED_CLASS);
+        this.playerContainer.classList.remove(LOADED_CLASS);
+        this.playerContainer.classList.add(NO_RECORDING_CLASS);
       }
 
-      this.audioSource.setAttribute("src", context.parameters.src.raw || "");
+      this.audioSource.setAttribute("src", context.parameters.src.raw?.trim() || "");
     }
   }
 

@@ -18,7 +18,7 @@
   <control 
     namespace="ShkoOnline" 
     constructor="AudioPlayer" 
-    version="1.0.0" 
+    version="1.0.1" 
     display-name-key="AudioPlayer_Display_Key" 
     description-key="AudioPlayer_Desc_Key" 
     control-type="standard" 

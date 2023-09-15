@@ -28,13 +28,18 @@
   display: none;
 }
 
-.ShkoOnline\.Player.ShkoOnline\.Unloaded .ShkoOnline\.Load, 
-.ShkoOnline\.Player.ShkoOnline\.Loaded .ShkoOnline\.Buttons  {
+.ShkoOnline\.Player.ShkoOnline\.Unloaded .ShkoOnline\.Load,
+.ShkoOnline\.Player.ShkoOnline\.Loaded .ShkoOnline\.Buttons,
+.ShkoOnline\.Player.ShkoOnline\.NoRecording .ShkoOnline\.NoRecord {
   display: flex;
 }
 
 .ShkoOnline\.Player.ShkoOnline\.Loaded .ShkoOnline\.Load,
-.ShkoOnline\.Player.ShkoOnline\.Unloaded .ShkoOnline\.Buttons {
+.ShkoOnline\.Player.ShkoOnline\.Loaded .ShkoOnline\.NoRecord,
+.ShkoOnline\.Player.ShkoOnline\.Unloaded .ShkoOnline\.Buttons,
+.ShkoOnline\.Player.ShkoOnline\.Unloaded .ShkoOnline\.NoRecord,
+.ShkoOnline\.Player.ShkoOnline\.NoRecording .ShkoOnline\.Load,
+.ShkoOnline\.Player.ShkoOnline\.NoRecording .ShkoOnline\.Buttons {
   display: none;
 }
 
@@ -56,7 +61,7 @@
   margin-left: 10px;
 }
 
-.ShkoOnline\.Infos > div {
+.ShkoOnline\.Infos>div {
   margin-bottom: 8px;
   color: #e40046;
 }
@@ -77,12 +82,16 @@
   border-radius: 10px;
 }
 
-.ShkoOnline\.Buttons, .ShkoOnline\.Load {
+.ShkoOnline\.Buttons,
+.ShkoOnline\.Load,
+.ShkoOnline\.NoRecord {
   align-items: center;
   justify-content: center;
 }
 
-.ShkoOnline\.Buttons > div, .ShkoOnline\.Load > div {
+.ShkoOnline\.Buttons>div,
+.ShkoOnline\.Load>div,
+.ShkoOnline\.NoRecord>div {
   padding: 5px;
   margin-top: 18px;
   margin-bottom: 18px;
@@ -131,4 +140,11 @@
   background-repeat: no-repeat;
   background-position: center;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 640 512'%3E%3Cpath fill='%23e40046' d='M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-167l80 80c9.4 9.4 24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-39 39V184c0-13.3-10.7-24-24-24s-24 10.7-24 24V318.1l-39-39c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9z'/%3E%3C/svg%3E");
+}
+
+.ShkoOnline\.NoRecord {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 1920 1920'%3E%3Cpath fill='%23e40046' d='M213.333 960c0-167.36 56-321.707 149.44-446.4L1406.4 1557.227c-124.693 93.44-279.04 149.44-446.4 149.44-411.627 0-746.667-335.04-746.667-746.667m1493.334 0c0 167.36-56 321.707-149.44 446.4L513.6 362.773c124.693-93.44 279.04-149.44 446.4-149.44 411.627 0 746.667 335.04 746.667 746.667M960 0C429.76 0 0 429.76 0 960s429.76 960 960 960 960-429.76 960-960S1490.24 0 960 0' fill-rule='evenodd'/%3E%3C/svg%3E");
+
 }
