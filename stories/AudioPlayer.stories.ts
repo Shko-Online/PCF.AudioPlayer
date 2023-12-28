@@ -27,7 +27,7 @@ import {
 
 import { AudioPlayer as Component } from "../AudioPlayer/index";
 
-import '../AudioPlayer/css/AudioPlayer.css';
+import "../AudioPlayer/css/AudioPlayer.css";
 
 interface StoryArgs {
   isVisible: boolean;
@@ -38,9 +38,27 @@ interface StoryArgs {
 export default {
   title: "Shko Online's AudioPlayer",
   argTypes: {
-    isDisabled: {control: 'boolean'},
-    isVisible: {control: 'boolean'},
-    src: {control: "text"}
+    src: {
+      control: "text",
+      name: "Source",
+      table: {
+        category: "Parameters",
+      },
+    },
+    isDisabled: {
+      control: "boolean",
+      name: "Disabled",
+      table: {
+        category: "Mode",
+      },
+    },
+    isVisible: {
+      control: "boolean",
+      name: "Visible",
+      table: {
+        category: "Mode",
+      },
+    },  
   },
   args: {
     isDisabled: false,
@@ -91,8 +109,7 @@ const renderGenerator = () => {
       mockGenerator.onOutputChanged.callsFake(() => {
         mockGenerator.context._parameters.src._Refresh();
         updateArgs({
-          src:
-            mockGenerator.context._parameters.src.raw || undefined,
+          src: mockGenerator.context._parameters.src.raw || undefined,
         });
       });
 
@@ -102,9 +119,7 @@ const renderGenerator = () => {
     if (mockGenerator) {
       mockGenerator.context.mode.isVisible = args.isVisible;
       mockGenerator.context.mode.isControlDisabled = args.isDisabled;
-      mockGenerator.context._parameters.src._SetValue(
-        args.src
-      );
+      mockGenerator.context._parameters.src._SetValue(args.src);
       mockGenerator.ExecuteUpdateView();
     }
 

@@ -31,6 +31,7 @@ const config: StorybookConfig = {
     name: "@storybook/html-webpack5",
     options: {},
   },
+  staticDirs: ['./public'],
   docs: {
     autodocs: "tag",
   },
