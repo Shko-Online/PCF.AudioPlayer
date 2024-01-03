@@ -36,7 +36,7 @@ interface StoryArgs {
 }
 
 export default {
-  title: "Shko Online's AudioPlayer",
+  title: "Shko Online's AudioPlayer/Audio Player",
   argTypes: {
     src: {
       control: "text",
