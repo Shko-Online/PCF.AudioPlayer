@@ -14,11 +14,10 @@
    limitations under the License.
 */
 
-import type { Meta, StoryFn, StoryObj } from "@storybook/html";
-
+import type { Meta, StoryObj } from "@storybook/html";
 import type { IInputs, IOutputs } from "../AudioPlayer/generated/ManifestTypes";
 
-import { useArgs } from "@storybook/client-api";
+import { useArgs, useEffect } from "@storybook/preview-api";
 
 import {
   ComponentFrameworkMockGenerator,
@@ -58,7 +57,7 @@ export default {
       table: {
         category: "Mode",
       },
-    },  
+    },
   },
   args: {
     isDisabled: false,
@@ -85,11 +84,17 @@ export default {
 } as Meta<StoryArgs>;
 
 const renderGenerator = () => {
-  let container: HTMLDivElement;
+  let container: HTMLDivElement | null;
   let mockGenerator: ComponentFrameworkMockGenerator<IInputs, IOutputs>;
-
   return function () {
     const [args, updateArgs] = useArgs<StoryArgs>();
+    useEffect(
+      () => () => {
+        container = null;
+        mockGenerator.control.destroy();
+      },
+      []
+    );
     if (!container) {
       container = document.createElement("div");
       mockGenerator = new ComponentFrameworkMockGenerator(

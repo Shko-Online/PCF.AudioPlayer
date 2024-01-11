@@ -15,7 +15,8 @@
 */
 
 import type { StorybookConfig } from "@storybook/html-webpack5";
-const webpack = require('webpack');
+import path from "path";
+const webpack = require("webpack");
 
 const config: StorybookConfig = {
   stories: [
@@ -31,24 +32,28 @@ const config: StorybookConfig = {
     name: "@storybook/html-webpack5",
     options: {},
   },
-  staticDirs: ['./public'],
+  staticDirs: ["./public"],
   docs: {
     autodocs: "tag",
   },
-  webpackFinal: async config => {
+  webpackFinal: async (config) => {
     config.devtool = false;
     config.resolve = config.resolve || {};
     config.resolve.fallback = config.resolve.fallback || {};
-    config.resolve.fallback['fs'] = false;
+    config.resolve.fallback["react/jsx-dev-runtime"] = path.resolve(
+      "./.storybook/jsx.runtime.js"
+    );
+    config.resolve.fallback["react/jsx-runtime"] = path.resolve(
+      "./.storybook/jsx.runtime.js"
+    );
     config.plugins = config.plugins || [];
-    config.plugins.push(new webpack.SourceMapDevToolPlugin({
-      append: '\n//# sourceMappingURL=[url]',
-      fileContext: './',
-      filename: '[file].map'
-    }));
-    config.plugins.push(new webpack.ProvidePlugin({
-      Buffer: ['buffer/', 'Buffer']
-    }));
+    config.plugins.push(
+      new webpack.SourceMapDevToolPlugin({
+        append: "\n//# sourceMappingURL=[url]",
+        fileContext: "./",
+        filename: "[file].map",
+      })
+    );
     return config;
   },
 };
