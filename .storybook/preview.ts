@@ -7,7 +7,6 @@ const preview: Preview = {
         order: ['Shko Online\'s AudioPlayer', ['Introduction', '*']],
       },
     },
-    actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
       matchers: {
         color: /(background|color)$/i,
