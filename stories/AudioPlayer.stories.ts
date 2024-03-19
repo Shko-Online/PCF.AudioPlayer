@@ -62,7 +62,7 @@ export default {
   args: {
     isDisabled: false,
     isVisible: true,
-    src: "https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/FHawMcpOy3JhGwZrliGSkqH6jOybzt77ki38jUXB.mp3",
+    src: "",
   },
   decorators: [
     (Story) => {
