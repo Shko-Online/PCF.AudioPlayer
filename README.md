@@ -6,15 +6,18 @@ To use the component follow these steps:
 2. Configure the component for your Choices form controls
 3. Enjoy!
 
-This is a demo of the component:
+## Demo
+
 https://main--6559cb12bce5150811879c95.chromatic.com/
 
+## Screenshots
+
+![AudioPlayer](https://github.com/pcf-stories/Shko-Online__PCF.AudioPlayer/assets/107688754/8f00eb38-011f-4606-8000-a6ea4ff47143)
+
+##
 
 
-
-What does the solution contain?
-
-
+What does the solution contain?!
 
 What does the configuration look like in a Model Driven App?
 
